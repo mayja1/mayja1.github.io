@@ -13,15 +13,6 @@ from jinja2 import Environment, FileSystemLoader
 
 # declare global variables
 env = Environment(loader=FileSystemLoader('./hotornot'))
-S3_ACCESS_KEY = 'AKIAI2L42BGVQS5V57QA'
-S3_SECRET_KEY = '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'
-
-config = {
-        'user': 'Floptical',
-        'passwd': 'Password1',
-        'host': 'floptical-relational-database.cxrbiaxhps5f.us-west-2.rds.amazonaws.com',
-        'db': 'flopticalDatabase'
-}
 
 
 class ServeSite(object):
