@@ -43,24 +43,3 @@ if __name__ == '__main__':
     cherrypy.server.socket_host = '0.0.0.0'
     cherrypy.quickstart(ServeSite(), '/', CP_CONF)
 
-'''
-if __name__ == '__main__':
-        conf = {
-                'global': {
-                'server.max_request_body_size': 0
-                },
-                '/': {
-                        'tools.sessions.on' : True,
-                        'tools.staticdir.root' : os.path.abspath(os.getcwd())
-                },
-                '/static': {
-                        'tools.staticdir.on': True,
-                        'tools.staticdir.dir': '/hotornot/resources'
-                }
-        }
-
-
-cherrypy.server.socket_host = '0.0.0.0'
-cherrypy.quickstart(ServeSite(), '/', conf)
-'''
-
