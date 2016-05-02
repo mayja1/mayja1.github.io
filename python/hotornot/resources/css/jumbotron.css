@@ -1,4 +1,16 @@
 /* Move down content because we have a fixed navbar that is 50px tall */
+.imageContainer { float: left; margin: 5px;}
+.profilePicture {
+    float: left;
+    margin: 5px;
+    position: relative;
+    width: 206px;
+    height: 206px;
+    border-radius: 10px;
+    border: solid 3px #fff;
+    box-shadow: 0 0 3px 2px #ccc;}
+.profilePicture input[type="checkbox"] { position: absolute; top: 0px; left: 0px; }
+
 body {
   padding-top: 50px;
   padding-bottom: 20px;

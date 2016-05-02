@@ -42,6 +42,7 @@ function statusChangeCallback(response) {
   // These three cases are handled in the callback function.
 
   FB.getLoginStatus(function(response) {
+    statusChangeCallback(response);
   });
 
 };
@@ -60,28 +61,75 @@ function statusChangeCallback(response) {
     console.log("getting user photos");
     FB.api('/me/albums?fields=id,name,link', 
       function(response) {
+        if(!response.data) {
+          console.log("error getting photos");
+          return;
+        }
         for (var i=0; i<response.data.length; i++) {
           var album = response.data[i];
           if (album.name == 'Profile Pictures'){
             console.log("Found profile pictures album")
-            FB.api('/'+album.id+'/photos?fields=id,name,picture', function(photos){
+            FB.api('/'+album.id+'/photos?fields=id,name,picture,height,width', function(photos){
               if (photos && photos.data && photos.data.length){
                 for (var j=0; j<photos.data.length; j++){
                   var photo = photos.data[j];
-                  console.log(photo);
+                  var div = document.createElement('div');
+                  div.className = "profilePicture";
+
+                  var checkbox = document.createElement('input');
+                  checkbox.type = "checkbox";
+                  checkbox.name = "images[]";
+                  checkbox.id = "value" + j;
+                  checkbox.addEventListener('click', function () {
+                    var checkgroup=document.getElementsByName("images[]");
+                    var limit=3;
+                    var checkedcount=0;
+                    for (var i=0; i<checkgroup.length; i++) {
+                      if(checkgroup[i].checked) {
+                        checkedcount++;
+                      }
+                    }
+                    if (checkedcount>limit){
+                      alert("You can only select a maximum of "+limit+" checkboxes")
+                      this.checked=false
+                    }
+                });
                   var image = document.createElement('img');
+
                   image.src = photo.picture;
-                  document.body.appendChild(image);
+                  if(photo.height > photo.width) {
+                    image.style.height = '100%';
+                    image.style.width = 'auto';
+                  } else {
+                    image.style.height = 'auto';
+                    image.style.width = '100%';
+                  }
+                  var label = document.createElement('label');
+                  label.htmlFor = checkbox.id;
+
+                  label.style.width = '100%';
+                  label.style.height = '100%';
+                  label.appendChild(image);
+                  
+                  var linebreak = document.createElement('br');
+                  var container = document.getElementById("picContainer");
+                  div.appendChild(checkbox);
+                  div.appendChild(label);
+                  if(j % 3 == 2) {
+                    div.appendChild(linebreak);
+                  }
+                  container.appendChild(div);
+                  
             // photo.picture contain the link to picture
             
           }
         }
       });
-            console.log("finished appending pictures");
-            break;
-          }
-        }
-      });
+console.log("finished appending pictures");
+break;
+}
+}
+});
 }
 
 function getFacebookPhoto(id) {
@@ -93,4 +141,21 @@ function getFacebookPhoto(id) {
     }
   }
   );
+}
+
+function checkboxlimit(){
+  console.log("checking limit");
+  var checkgroup=document.getElementsByTagName("images");
+  var limit=3;
+  for (var i=0; i<checkgroup.length; i++){
+    checkgroup[i].onclick=function(){
+      var checkedcount=0
+      for (var i=0; i<checkgroup.length; i++)
+        checkedcount+=(checkgroup[i].checked)? 1 : 0
+      if (checkedcount>limit){
+        alert("You can only select a maximum of "+limit+" checkboxes")
+        this.checked=false
+      }
+    }
+  }
 }
