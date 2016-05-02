@@ -10,9 +10,9 @@ function statusChangeCallback(response) {
       // Logged into your app and Facebook.
       
       testAPI();
-      if(window.location != "http://137.112.231.144:8080//profile") {
+      if(window.location != "../profile") {
         console.log("REDIRECTTING");
-        window.location = "http://137.112.231.144:8080/profile";
+        window.location = "../profile";
       }
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
