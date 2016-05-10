@@ -17,23 +17,56 @@
     <link href="/resources/css/jumbotron.css" rel="stylesheet">
     <link href="/resources/css/bargraph.css" rel ="stylesheet">
     <link href="/resources/css/navbar.css" rel ="stylesheet">
-
   </head>
 
   <body>
     <ul class="navbar">
-        <li class="active"><a href="../profile">Profile Pictures</a></li>
-        <li><a href="../home">Your Homepage</a></li> 
-        <li><a href="../rate">Rate Users</a></li>
+      <li class="active"><a href="../profile">Profile Pictures</a></li>
+      <li><a href="../home">Your Homepage</a></li> 
+      <li><a href="../rate">Rate Users</a></li>
     </ul>
     <div id="fb-root"></div>
     <div class="jumbotron">
       <div id="picContainer" class="container" >
         <h1>Please select photos for your profile for others to rate!<h1>
         </div> <!-- /container -->
-      <hr>
-    </div> <!-- /container -->
 
+
+        <div id="buttonContainer" class="container" >
+          <input type="button" class="button" value="Select Photos" style="display: block; margin: 0 auto;" onclick="setPics()" />
+        </div>
+      </div> <!-- /container -->
+
+      <script type="text/javascript">
+      //$("#btn_").on('click', function () {
+        function setPics(){
+          var checkbox_value = "";
+          var count = 0;
+          $(":checkbox").each(function () {
+            var ischecked = $(this).is(":checked");
+            if (ischecked) {
+              count = count + 1;
+              checkbox_value += $(this).val() + "|";
+            }
+          });
+    // your awesome code calling ajax
+    if(count == 0) {
+      alert("You must select at least one picture for your profile");
+    } else {
+      $.ajax({
+        type:"post",
+        url:"sendPictures",
+        data:{
+          email: "test@test.com",
+          pics : checkbox_value
+        },
+        success:function(msg){
+          alert(msg);
+        }
+      })
+    };
+  } 
+  </script>
 
       <!-- Bootstrap core JavaScript
       ================================================== -->
@@ -41,7 +74,7 @@
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
       <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
       <script src="/resources/js/bootstrap.js"></script>
-      <script src="/resources/js/ProfileFacebook.js"></script>
+      <script src="/resources/js/profile.js"></script>
       <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     </body>
     </html>

@@ -4,11 +4,8 @@ import string
 import cherrypy
 import pymysql
 import subprocess
-import tinys3
-import boto
-import boto.s3
 import sys
-from boto.s3.key import Key
+import json
 from jinja2 import Environment, FileSystemLoader
 
 # declare global variables
@@ -38,6 +35,27 @@ class ServeSite(object):
         def rate(self):
             tmpl = env.get_template('rate.html')
             return tmpl.render()
+
+        @cherrypy.expose
+        def sendPictures(self, email, pics):
+            for s in pics.split("|") :
+                print("pics: " + s);
+            
+            print("email: " + email);
+            ''' TODO Send pics and email to database'''
+            return "response"
+            
+        @cherrypy.expose
+        def getProfile(self, email):
+            print("")
+            print("email: " + email)
+            print("")
+            data = {
+            "pic1": "https://scontent.xx.fbcdn.net/v/t1.0-0/s130x130/1003353_10200920905322837_1184241546_n.jpg?oh=1a5fee3858e3ca36c85def0c977ad32f&oe=57AF1A32",
+            "pic2": "https://scontent.xx.fbcdn.net/v/t1.0-0/p130x130/995067_10200443612350811_956792499_n.jpg?oh=3064376713a96370b56355b982da005a&oe=57E0243C",
+            "pic3": "",
+            }
+            return json.dumps(data);
 
 CP_CONF = {
         '/resources': {

@@ -1,4 +1,16 @@
 /* Move down content because we have a fixed navbar that is 50px tall */
+.button {
+    background-color: red;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    width: 50%;
+    margin: 0 auto;
+}
 .imageContainer { float: left; margin: 5px;}
 .profilePicture {
     float: left;

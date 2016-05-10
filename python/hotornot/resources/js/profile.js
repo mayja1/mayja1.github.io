@@ -80,6 +80,7 @@ function statusChangeCallback(response) {
                   checkbox.type = "checkbox";
                   checkbox.name = "images[]";
                   checkbox.id = "value" + j;
+                  checkbox.value = photo.picture;
                   checkbox.addEventListener('click', function () {
                     var checkgroup=document.getElementsByName("images[]");
                     var limit=3;

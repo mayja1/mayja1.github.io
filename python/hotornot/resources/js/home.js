@@ -7,7 +7,9 @@ function statusChangeCallback(response) {
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
-      getUserPhotos();
+      FB.api('/me?fields=email', function(emailResponse) {
+        getUserPhotos(emailResponse.email);
+      });
       
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
@@ -57,34 +59,62 @@ function statusChangeCallback(response) {
   }(document, 'script', 'facebook-jssdk'));
 
 
-  function getUserPhotos() {
+  function getUserPhotos(email) {
     //todo, get user photos from database
-  }
+    console.log(email);
+    $.ajax({
+      type:"post",
+      url:"getProfile",
+      data:{
+        email: email,
+      },
+      success:function(msg){
+        console.log(msg);
+        var dict = JSON.parse(msg);
+        var list = [dict["pic1"], dict["pic2"], dict["pic3"]];
 
-function getFacebookPhoto(id) {
- FB.api(
-  "/" + id,
-  function (response) {
-    if (response && !response.error) {
-      /* handle the result */
+        console.log(list);
+        for(var i = 0; i < list.length; i = i+1){
+          var photo = list[i];
+          console.log(photo);
+          var image = document.createElement('img');
+
+          image.src = photo;
+          if(photo.height > photo.width) {
+           image.style.height = '100%';
+           image.style.width = 'auto';
+         } else {
+          image.style.height = 'auto';
+          image.style.width = '100%';
+        }
+        var label = document.createElement('label');
+
+        label.style.width = '100%';
+        label.style.height = '100%';
+        label.appendChild(image);
+
+        var linebreak = document.createElement('br');
+        var container = document.getElementById("picContainer");
+
+        var div = document.createElement('div');
+        div.className = "profilePicture";
+        div.appendChild(label);
+        div.appendChild(linebreak);
+        container.appendChild(div);
+      }
+      
     }
+  })
+    
   }
-  );
-}
 
-function checkboxlimit(){
-  console.log("checking limit");
-  var checkgroup=document.getElementsByTagName("images");
-  var limit=3;
-  for (var i=0; i<checkgroup.length; i++){
-    checkgroup[i].onclick=function(){
-      var checkedcount=0
-      for (var i=0; i<checkgroup.length; i++)
-        checkedcount+=(checkgroup[i].checked)? 1 : 0
-      if (checkedcount>limit){
-        alert("You can only select a maximum of "+limit+" checkboxes")
-        this.checked=false
+  function getFacebookPhoto(id) {
+   FB.api(
+    "/" + id,
+    function (response) {
+      if (response && !response.error) {
+        /* handle the result */
       }
     }
-  }
-}
+    );
+ }
