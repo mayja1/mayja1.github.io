@@ -22,15 +22,32 @@
 
   <body>
     <ul class="navbar">
-        <li class="active"><a href="../profile">Profile Pictures</a></li>
-        <li><a href="../home">Your Homepage</a></li> 
+        <li><a href="../profile">Profile Pictures</a></li>
+        <li class="active"><a href="../home">Your Homepage</a></li> 
         <li><a href="../rate">Rate Users</a></li>
     </ul>
     <div id="fb-root"></div>
     <div class="jumbotron">
       <div id="picContainer" class="container" >
-        <h1>Please select photos for your profile for others to rate!<h1>
+        <h1>These are your selected photos for your profile for others to rate!<h1>
         </div> <!-- /container -->
+        <div class = "container">
+          <h1>Your current level of HOTNESS:</h1>
+        </div>
+        <ul class="bargraph">
+          <li class="reddeep">10</li>
+          <li class="redpink">9</li>
+          <li class="pink">8</li>
+          <li class="orangered">7</li>
+          <li class="orange">6</li>
+          <li class="yellow">5</li>
+          <li class="green">4</li>
+          <li class="greenbright">3</li>
+          <li class="greenblue">2</li>
+          <li class="blue">1</li>
+        </ul>
+      </div>
+
       <hr>
     </div> <!-- /container -->
 
@@ -41,7 +58,7 @@
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
       <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
       <script src="/resources/js/bootstrap.js"></script>
-      <script src="/resources/js/ProfileFacebook.js"></script>
+      <script src="/resources/js/home.js"></script>
       <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     </body>
     </html>

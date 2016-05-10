@@ -12,7 +12,7 @@
 .profilePicture input[type="checkbox"] { position: absolute; top: 0px; left: 0px; }
 
 body {
-  padding-top: 50px;
+  padding-top: 0px;
   padding-bottom: 20px;
   background-color: red;
 }

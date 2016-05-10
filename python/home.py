@@ -30,6 +30,14 @@ class ServeSite(object):
         def privacy(self):
                 tmpl = env.get_template('privacy.html')
                 return tmpl.render()
+        @cherrypy.expose
+        def home(self):
+            tmpl = env.get_template('home.html')
+            return tmpl.render()
+        @cherrypy.expose
+        def rate(self):
+            tmpl = env.get_template('rate.html')
+            return tmpl.render()
 
 CP_CONF = {
         '/resources': {

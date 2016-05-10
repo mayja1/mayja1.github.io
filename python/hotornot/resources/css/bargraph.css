@@ -12,7 +12,7 @@ https://www.otreva.com/blog/create-a-htmlcss-horizontal-bar-graph/
   margin-left: auto;
     }
     
-    ul.bargraph li {
+ul.bargraph li {
     height: 35px;
     color: white;
     text-align: left;
@@ -22,9 +22,9 @@ https://www.otreva.com/blog/create-a-htmlcss-horizontal-bar-graph/
     line-height: 35px;
     padding: 0px 20px;
     margin-bottom: 5px;
-    }
+}
     
-    ul.bargraph li.reddeep {
+ul.bargraph li.reddeep {
 background: #ED1C24;
 width:100%;
 }
