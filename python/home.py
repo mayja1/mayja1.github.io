@@ -49,6 +49,7 @@ class ServeSite(object):
                 with conn.cursor() as cursor:
                     sql = "INSERT INTO 'Users' ('Email', 'Picture1', 'Picture2', 'Picture3') VALUES (%s, %s, %s, %s)"
                     cursor.execute(sql, (email, pics[0], pics[1], pics[2]))
+                conn.commit()
 
             return "response"
 
@@ -62,6 +63,12 @@ class ServeSite(object):
             "pic2": "https://scontent.xx.fbcdn.net/v/t1.0-0/p130x130/995067_10200443612350811_956792499_n.jpg?oh=3064376713a96370b56355b982da005a&oe=57E0243C",
             "pic3": "",
             }
+            try:
+                with conn.cursor as cursor:
+                    sql = "SELECT 'Picture1', 'Picture2', 'Picture3' FROM 'Users' WHERE 'Email' = %s"
+                    cursor.execute(sql, (email))
+                    result = cursor.fetchone()
+
             return json.dumps(data);
 
         @cherrypy.expose
@@ -83,6 +90,15 @@ class ServeSite(object):
             }
             return json.dumps(data);
 
+            try:
+                with conn.cursor as cursor:
+                    sql = "SELECT 'Ranking1', 'Ranking2', 'Ranking3', 'Ranking4', 'Ranking5', 'Ranking6', 'Ranking7', 'Ranking8', 'Ranking9','Ranking10' FROM 'Users' WHERE 'email' = %s"
+                    cursor.execute(sql, (email))
+                    result = cursor.fetchone()
+                    ###########################################
+                    # NOTE: WE WILL HAVE TO CONNECTION.CLOSE()#
+                    #           AT SOME POINT                 #
+                    ###########################################
 CP_CONF = {
         '/resources': {
             'tools.staticdir.on': True,
