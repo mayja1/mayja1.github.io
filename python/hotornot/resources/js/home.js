@@ -9,6 +9,7 @@ function statusChangeCallback(response) {
       // Logged into your app and Facebook.
       FB.api('/me?fields=email', function(emailResponse) {
         getUserPhotos(emailResponse.email);
+        getUserRatings(emailResponse.email);
       });
       
     } else if (response.status === 'not_authorized') {
@@ -108,6 +109,50 @@ function statusChangeCallback(response) {
     
   }
 
+function getUserRatings(email) {
+    //todo, get user photos from database
+    console.log(email);
+    $.ajax({
+      type:"post",
+      url:"getRatings",
+      data:{
+        email: email,
+      },
+      success:function(msg){
+        console.log(msg);
+        var dict = JSON.parse(msg);
+        var colors = ["#0000FF", "#3300FF", "#6600FF", "#9900FF", "#CC00FF", "#FF00CC", "#FF0099", "#FF0066", "#FF0033" ,"#FF0000"];
+        var list = [];
+        var totalNumberOfRatings = 0;
+        var totalRating = 0;
+        var max = 0;
+        for(var i = 0; i <= 9; i= i+1){
+          var numRatings = dict["" + (i+1)];
+          list.push(numRatings);
+          totalNumberOfRatings += numRatings;
+          totalRating = numRatings * (i+1);
+          if(numRatings > max) {
+            max = numRatings;
+          }
+        }
+
+        for(var i = 9; i >= 0; i = i-1){
+          var numRatings = list[i];
+          console.log("" + (i+1) + ": " + numRatings);
+          var bar = document.createElement('li');
+          bar.style.width = "" + ((numRatings/max)*100) + "%";
+          bar.style.background = colors[i];
+          bar.innerHTML = "" + (i+1);
+          var container = document.getElementById("bargraph");
+          container.appendChild(bar);
+      }
+      var text = document.getElementById("hotness");
+      text.innerHTML = text.innerHTML + (totalRating/totalNumberOfRatings);
+      
+    }
+  })
+    
+  }
   function getFacebookPhoto(id) {
    FB.api(
     "/" + id,
