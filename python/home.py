@@ -10,6 +10,7 @@ from jinja2 import Environment, FileSystemLoader
 
 # declare global variables
 env = Environment(loader=FileSystemLoader('./hotornot'))
+conn = pymysql.connect(host='titan.csse.rose-hulman.edu', port=3306, user='hullzr', passwd='Ballin22', db='Hulleva Amayzing ProjectDB')
 
 
 class ServeSite(object):
@@ -38,11 +39,17 @@ class ServeSite(object):
 
         @cherrypy.expose
         def sendPictures(self, email, pics):
+
             for s in pics.split("|") :
                 print("pics: " + s);
             
             print("email: " + email);
             ''' TODO Send pics and email to database'''
+            try:
+                with conn.cursor() as cursor:
+                    sql = "INSERT INTO 'Users' ('Email', 'Picture1', 'Picture2', 'Picture3') VALUES (%s, %s, %s, %s)"
+                    cursor.execute(sql, (email, pics[0], pics[1], pics[2]))
+
             return "response"
 
         @cherrypy.expose
