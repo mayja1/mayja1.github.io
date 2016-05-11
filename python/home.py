@@ -10,7 +10,7 @@ from jinja2 import Environment, FileSystemLoader
 
 # declare global variables
 env = Environment(loader=FileSystemLoader('./hotornot'))
-conn = pymysql.connect(host='localhost', port=3306, user='root', passwd='', db='mysql')
+conn = pymysql.connect(host='titan.csse.rose-hulman.edu', port=3306, user='hullzr', passwd='Ballin22', db='Hulleva Amayzing ProjectDB')
 
 
 class ServeSite(object):
