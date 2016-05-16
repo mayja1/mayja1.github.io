@@ -10,6 +10,7 @@ from jinja2 import Environment, FileSystemLoader
 import sqlite3
 
 # declare global variables
+sess = cherrypy.session
 env = Environment(loader=FileSystemLoader('./hotornot'))
 #conn = pymysql.connect(host='titan.csse.rose-hulman.edu', port=3306, user='hullzr', passwd='Ballin22', db='Hulleva Amayzing ProjectDB')
 class ServeSite(object):
@@ -34,6 +35,9 @@ class ServeSite(object):
         @cherrypy.expose
         def rate(self):
             tmpl = env.get_template('rate.html')
+            conn = sqlite3.connect('hotornot.db')
+            cursor = conn.cursor()
+
             return tmpl.render()
 
         @cherrypy.expose
@@ -54,6 +58,25 @@ class ServeSite(object):
                 conn.commit()
             finally:
                 return response
+
+        @cherrpy.expose
+        def setEmail(self, email):
+            sess['email'] = email
+            
+        @cherrypy.expose
+        def getRandomUser(self):
+            result = {}
+
+            conn = sqlite3.connect('hotornot.db')
+            cursor = conn.cursor()
+            sql = "SELECT Email, Picture1, Picture2, Picture3 FROM User WHERE Email != ?  ORDER BY RANDOM() LIMIT 1"
+            temp = cursor.execute(sql, (sess['email'],)
+            for row in temp:
+                result['Email'] = row[0]
+                result['Picture1'] = row[1]
+                result['Picture2'] = row[2]
+                result['Picture3'] = row[3]
+            return json.dumbs(result)
 
         @cherrypy.expose
         def getProfile(self, email):
@@ -88,6 +111,7 @@ class ServeSite(object):
 CP_CONF = {
         '/resources': {
             'tools.staticdir.on': True,
+            'tools.session.on': True,
             'tools.staticdir.dir': os.path.abspath('./hotornot/resources')
             }
         }
