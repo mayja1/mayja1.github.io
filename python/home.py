@@ -47,8 +47,9 @@ class ServeSite(object):
             try:
                 conn = sqlite3.connect('hotornot.db')
                 cursor = conn.cursor()
-                sql = "UPDATE User SET ? = ? + 1 WHERE Email = ?"
-                response = cursor.execute(sql, ('Rank'+str(rank), 'Rank'+str(rank), email))
+                sql = "UPDATE User SET %s = %s + 1 WHERE Email = ?" % ('Rank'+str(rank), 'Rank'+str(rank))
+                print(sql)
+                response = cursor.execute(sql, (email,))
                 conn.commit()
             finally:
                 print("Ranking updated")

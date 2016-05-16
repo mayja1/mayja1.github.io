@@ -13,6 +13,9 @@ function getUserPhotos() {
       success:function(msg){
         console.log(msg);
         var dict = JSON.parse(msg);
+        console.log(dict["email"])
+        console.log(dict["Email"])
+        document.getElementById("email").value = dict["Email"];
         var list = [dict["Picture1"], dict["Picture2"], dict["Picture3"]];
 
         console.log(list);
@@ -50,4 +53,24 @@ function getUserPhotos() {
     }
   })
     
+  }
+
+  function submitRating() {
+  var range = document.getElementById("slider").value;
+  var email = document.getElementById("email").value;
+  console.log("email: " + email);
+  console.log("value: " + range);
+  $.ajax({
+      type:"post",
+      url:"setRating",
+      data:{
+        email: email,
+        rank: range
+      },
+
+      success:function(msg){
+        alert("Rating submited!");
+        location.reload();
+      }
+    })
   }
