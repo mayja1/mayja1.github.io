@@ -1,6 +1,10 @@
+window.onload = function() {
+  getUserPhotos();
+};
+
+
 function getUserPhotos() {
     //todo, get user photos from database
-    console.log(email);
     $.ajax({
       type:"post",
       url:"getRandomUser",

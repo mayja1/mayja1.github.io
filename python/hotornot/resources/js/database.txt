@@ -1,0 +1,4 @@
+create table User(email varchar(50) unique, picture1 varchar(100), picture2 varchar(100), picture3 varchar(100), rank10 integer default 0, rank9 integer default 0, rank8 integer default 0, rank7 integer default 0, rank6 integer default 0, rank5 integer default 0, rank4 integer default 0, rank3 integer default 0, rank2 integer default 0, rank1 integer default 0);
+
+insert into user('email', 'picture1', 'picture2', 'picture3') values('test@test.com', 'pic1.com', 'pic2.com', 'pic3.com');
+

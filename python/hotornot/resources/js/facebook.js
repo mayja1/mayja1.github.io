@@ -8,22 +8,13 @@ function statusChangeCallback(response) {
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
-      
-      testAPI();
       if(window.location != "../profile") {
         console.log("REDIRECTTING");
         FB.api('/me?fields=email', function(emailResponse) {
-          $.ajax({
-            type:"post",
-            url:"setEmail",
-            data:{
-              email: emailResponse.emailResponse,
-            },
-            success:function(msg){
-              window.location = "../profile";
-            });
-        }
-      } else if (response.status === 'not_authorized') {
+          setEmail(emailResponse.email)
+        })          
+      }
+    } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
       console.log('Please log '+     'into this app.');
     } else {
@@ -79,13 +70,18 @@ function statusChangeCallback(response) {
     fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));
 
-  // Here we run a very simple test of the Graph API after login is
-  // successful.  See statusChangeCallback() for when this call is made.
-  function testAPI() {
-    console.log('Welcome!  Fetching your information.... ');
-    FB.api('/me', function(response) {
-      console.log('Successful login for: ' + response.name);
-      document.getElementById('status').innerHTML =
-      'Thanks for logging in, ' + response.name + '!';
-    });
+
+  function setEmail(email) {
+    console.log(email)
+    $.ajax({
+            type:"post",
+            url:"setEmail",
+            data:{
+              email: email,
+            },
+            success:function(msg){
+
+              window.location = "../profile";
+            }
+          })
   }

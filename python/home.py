@@ -10,7 +10,6 @@ from jinja2 import Environment, FileSystemLoader
 import sqlite3
 # declare global variables
 env = Environment(loader=FileSystemLoader('./hotornot'))
-#conn = pymysql.connect(host='titan.csse.rose-hulman.edu', port=3306, user='hullzr', passwd='Ballin22', db='Hulleva Amayzing ProjectDB')
 class ServeSite(object):
         @cherrypy.expose
         def index(self):
@@ -71,7 +70,9 @@ class ServeSite(object):
 
         @cherrypy.expose
         def setEmail(self, email):
+            print("saving email")
             cherrypy.session['email'] = email
+            print("set email")
             
         @cherrypy.expose
         def getRandomUser(self):
@@ -86,7 +87,7 @@ class ServeSite(object):
                 result['Picture1'] = row[1]
                 result['Picture2'] = row[2]
                 result['Picture3'] = row[3]
-            return json.dumbs(result)
+            return json.dumps(result)
 
         @cherrypy.expose
         def getProfile(self, email):
@@ -126,8 +127,9 @@ CP_CONF = {
         }
 
 if __name__ == '__main__':
-    cherrypy.config.update({'session_filter.on': True})
+    cherrypy.config.update({'tools.sessions.on': True})
     cherrypy.config.update({'server.socket_port': 8080})
     cherrypy.server.socket_host = '0.0.0.0'
     cherrypy.quickstart(ServeSite(), '/', CP_CONF)
+    cherrypy.session.start()
 
