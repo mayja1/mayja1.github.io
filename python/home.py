@@ -10,6 +10,8 @@ from jinja2 import Environment, FileSystemLoader
 import sqlite3
 
 # declare global variables
+sess = cherrypy.session
+sess
 env = Environment(loader=FileSystemLoader('./hotornot'))
 #conn = pymysql.connect(host='titan.csse.rose-hulman.edu', port=3306, user='hullzr', passwd='Ballin22', db='Hulleva Amayzing ProjectDB')
 class ServeSite(object):
@@ -34,6 +36,9 @@ class ServeSite(object):
         @cherrypy.expose
         def rate(self):
             tmpl = env.get_template('rate.html')
+            conn = sqlite3.connect('hotornot.db')
+            cursor = conn.cursor()
+
             return tmpl.render()
 
         @cherrypy.expose
@@ -54,6 +59,11 @@ class ServeSite(object):
                 conn.commit()
             finally:
                 return response
+
+        @cherrpy.expose
+        def setEmail(self, email):
+
+            
 
         @cherrypy.expose
         def getProfile(self, email):
@@ -88,6 +98,7 @@ class ServeSite(object):
 CP_CONF = {
         '/resources': {
             'tools.staticdir.on': True,
+            'tools.session.on': True,
             'tools.staticdir.dir': os.path.abspath('./hotornot/resources')
             }
         }
