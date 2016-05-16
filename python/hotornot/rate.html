@@ -1,31 +1,49 @@
   <!DOCTYPE html>
   <html lang="en">
-    <head>
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-      <meta name="description" content="">
-      <meta name="author" content="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-      <link rel="icon" type="image/png" href="/favicon.png">
-      <title>Hot or Not?</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <title>Hot or Not?</title>
 
-      <!-- Bootstrap core CSS -->
-      <link href="/resources/css/bootstrap.css" type="text/css" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="/resources/css/bootstrap.css" type="text/css" rel="stylesheet">
 
-      <!-- Custom styles for this template -->
-      <link href="/resources/css/jumbotron.css" rel="stylesheet">
-      <link href="/resources/css/navbar.css" rel="stylesheet">
-    </head>
+    <!-- Custom styles for this template -->
+    <link href="/resources/css/jumbotron.css" rel="stylesheet">
+    <link href="/resources/css/navbar.css" rel="stylesheet">
+  </head>
 
-    <body>
-       <body>
+  <body>
+   <body>
     <ul class="navbar">
-        <li><a href="../profile">Profile Pictures</a></li>
-        <li><a href="../home">Your Homepage</a></li> 
-        <li class="active"><a href="../rate">Rate Users</a></li>
+      <li><a href="../profile">Profile Pictures</a></li>
+      <li><a href="../home">Your Homepage</a></li> 
+      <li class="active"><a href="../rate">Rate Users</a></li>
     </ul>
+    <div class="jumbotron">
+      <div id="picContainer" class="container" >
+        <h1>Rate on a scale of 1 to 10!<h1>
+        </div> <!-- /container -->
+        <div class = "container">
+          <input type="range" min="0" max="10" value="5" oninput="showValue(this.value)" >
+          <h2 id="range">0</h2>
+          <script type="text/javascript">
+          function showValue(newValue)
+          {
+            document.getElementById("range").innerHTML=newValue;
+          }
+          </script>
+        </div>
+      </div>
+
+      <hr>
+    </div> <!-- /container -->
 
 
       <!-- Bootstrap core JavaScript
@@ -33,7 +51,8 @@
       <!-- Placed at the end of the document so the pages load faster -->
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
       <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+      <script src="/resources/js/rate.js"></script>
       <script src="/resources/js/bootstrap.js"></script>
       <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     </body>
-  </html>
+    </html>

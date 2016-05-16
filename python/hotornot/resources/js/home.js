@@ -132,7 +132,7 @@ function getUserRatings(email) {
           var numRatings = dict["" + (i)];
           list.push(numRatings);
           totalNumberOfRatings += numRatings;
-          totalRating = numRatings * (i+1);
+          totalRating += numRatings * (i);
           if(numRatings > max) {
             max = numRatings;
           }
@@ -145,7 +145,7 @@ function getUserRatings(email) {
           if(max == 0) {
             bar.style.width = "" + 0 + "%";
           } else {
-            bar.style.width = "" + ((numRatings/max)*100) + "%";
+            bar.style.width = "" + ((numRatings/totalNumberOfRatings)*100) + "%";
           }
           bar.style.background = colors[i];
           bar.innerHTML = "" + (i+1);
