@@ -72,7 +72,7 @@ function statusChangeCallback(response) {
       success:function(msg){
         console.log(msg);
         var dict = JSON.parse(msg);
-        var list = [dict["pic1"], dict["pic2"], dict["pic3"]];
+        var list = [dict["Picture1"], dict["Picture2"], dict["Picture3"]];
 
         console.log(list);
         for(var i = 0; i < list.length; i = i+1){

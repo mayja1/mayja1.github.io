@@ -39,10 +39,8 @@ class ServeSite(object):
 
         @cherrypy.expose
         def sendPictures(self, email, pics):
-
             for s in pics.split("|") :
-                print("pics: " + s);
-            
+                print("pics: " + s)
             print("email: " + email);
             ''' TODO Send pics and email to database'''
             try:
@@ -50,26 +48,20 @@ class ServeSite(object):
                     sql = "INSERT INTO 'Users' ('Email', 'Picture1', 'Picture2', 'Picture3') VALUES (%s, %s, %s, %s)"
                     cursor.execute(sql, (email, pics[0], pics[1], pics[2]))
                 conn.commit()
-
-            return "response"
+            finally:
+                return "response"
 
         @cherrypy.expose
         def getProfile(self, email):
-            print("")
-            print("email: " + email)
-            print("")
-            data = {
-            "pic1": "https://scontent.xx.fbcdn.net/v/t1.0-0/s130x130/1003353_10200920905322837_1184241546_n.jpg?oh=1a5fee3858e3ca36c85def0c977ad32f&oe=57AF1A32",
-            "pic2": "https://scontent.xx.fbcdn.net/v/t1.0-0/p130x130/995067_10200443612350811_956792499_n.jpg?oh=3064376713a96370b56355b982da005a&oe=57E0243C",
-            "pic3": "",
-            }
             try:
                 with conn.cursor as cursor:
                     sql = "SELECT 'Picture1', 'Picture2', 'Picture3' FROM 'Users' WHERE 'Email' = %s"
                     cursor.execute(sql, (email))
                     result = cursor.fetchone()
-
-            return json.dumps(data);
+                    print(result)
+                    return json.dumps(result)
+            finally:
+                return ""
 
         @cherrypy.expose
         def getRatings(self, email):
@@ -99,6 +91,10 @@ class ServeSite(object):
                     # NOTE: WE WILL HAVE TO CONNECTION.CLOSE()#
                     #           AT SOME POINT                 #
                     ###########################################
+                    print(result)
+                    return json.dumps(result)
+            finally:
+                return ""
 CP_CONF = {
         '/resources': {
             'tools.staticdir.on': True,
