@@ -11,7 +11,6 @@ import sqlite3
 
 # declare global variables
 sess = cherrypy.session
-sess
 env = Environment(loader=FileSystemLoader('./hotornot'))
 #conn = pymysql.connect(host='titan.csse.rose-hulman.edu', port=3306, user='hullzr', passwd='Ballin22', db='Hulleva Amayzing ProjectDB')
 class ServeSite(object):
@@ -62,8 +61,22 @@ class ServeSite(object):
 
         @cherrpy.expose
         def setEmail(self, email):
-
+            sess['email'] = email
             
+        @cherrypy.expose
+        def getRandomUser(self):
+            result = {}
+
+            conn = sqlite3.connect('hotornot.db')
+            cursor = conn.cursor()
+            sql = "SELECT Email, Picture1, Picture2, Picture3 FROM User WHERE Email != sess['email']  ORDER BY RANDOM() LIMIT 1"
+            temp = cursor.execute(sql)
+            for row in temp:
+                result['Email'] = row[0]
+                result['Picture1'] = row[1]
+                result['Picture2'] = row[2]
+                result['Picture3'] = row[3]
+            return json.dumbs(result)
 
         @cherrypy.expose
         def getProfile(self, email):
