@@ -14,29 +14,41 @@ env = Environment(loader=FileSystemLoader('./hotornot'))
 class ServeSite(object):
         @cherrypy.expose
         def index(self):
+                cherrypy.session.load()
                 print(os.path.abspath(os.getcwd()))
                 tmpl = env.get_template('index.html')
                 return tmpl.render()
 
         @cherrypy.expose
         def profile(self):
+                cherrypy.session.load()
                 tmpl = env.get_template('profile.html')
                 return tmpl.render()
         @cherrypy.expose
         def privacy(self):
+                cherrypy.session.load()
                 tmpl = env.get_template('privacy.html')
                 return tmpl.render()
         @cherrypy.expose
         def home(self):
+            cherrypy.session.load()
             tmpl = env.get_template('home.html')
             return tmpl.render()
         @cherrypy.expose
         def rate(self):
+            cherrypy.session.load()
             tmpl = env.get_template('rate.html')
             conn = sqlite3.connect('hotornot.db')
             cursor = conn.cursor()
 
             return tmpl.render()
+
+        @cherrypy.expose
+        def setRating(self, email, rank):
+            conn = sqlite3.connect('hotornot.db')
+            cursor = conn.cursor()
+            sql = "UPDATE User SET ? = ? + 1 WHERE Email = ?"
+            response = cursor.execute(sql, ('Rank'+str(rank), 'Rank'+str(rank), email))
 
         @cherrypy.expose
         def sendPictures(self, email, pics):
