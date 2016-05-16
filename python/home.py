@@ -69,8 +69,8 @@ class ServeSite(object):
 
             conn = sqlite3.connect('hotornot.db')
             cursor = conn.cursor()
-            sql = "SELECT Email, Picture1, Picture2, Picture3 FROM User WHERE Email != sess['email']  ORDER BY RANDOM() LIMIT 1"
-            temp = cursor.execute(sql)
+            sql = "SELECT Email, Picture1, Picture2, Picture3 FROM User WHERE Email != ?  ORDER BY RANDOM() LIMIT 1"
+            temp = cursor.execute(sql, (sess['email'],)
             for row in temp:
                 result['Email'] = row[0]
                 result['Picture1'] = row[1]
