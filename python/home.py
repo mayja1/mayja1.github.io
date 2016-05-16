@@ -8,9 +8,7 @@ import sys
 import json
 from jinja2 import Environment, FileSystemLoader
 import sqlite3
-
 # declare global variables
-sess = cherrypy.session
 env = Environment(loader=FileSystemLoader('./hotornot'))
 #conn = pymysql.connect(host='titan.csse.rose-hulman.edu', port=3306, user='hullzr', passwd='Ballin22', db='Hulleva Amayzing ProjectDB')
 class ServeSite(object):
@@ -59,9 +57,9 @@ class ServeSite(object):
             finally:
                 return response
 
-        @cherrpy.expose
+        @cherrypy.expose
         def setEmail(self, email):
-            sess['email'] = email
+            cherrypy.session['email'] = email
             
         @cherrypy.expose
         def getRandomUser(self):
@@ -70,7 +68,7 @@ class ServeSite(object):
             conn = sqlite3.connect('hotornot.db')
             cursor = conn.cursor()
             sql = "SELECT Email, Picture1, Picture2, Picture3 FROM User WHERE Email != ?  ORDER BY RANDOM() LIMIT 1"
-            temp = cursor.execute(sql, (sess['email'],)
+            temp = cursor.execute(sql, (cherrypy.session['email'],))
             for row in temp:
                 result['Email'] = row[0]
                 result['Picture1'] = row[1]
@@ -111,12 +109,12 @@ class ServeSite(object):
 CP_CONF = {
         '/resources': {
             'tools.staticdir.on': True,
-            'tools.session.on': True,
             'tools.staticdir.dir': os.path.abspath('./hotornot/resources')
             }
         }
 
 if __name__ == '__main__':
+    cherrypy.config.update({'session_filter.on': True})
     cherrypy.config.update({'server.socket_port': 8080})
     cherrypy.server.socket_host = '0.0.0.0'
     cherrypy.quickstart(ServeSite(), '/', CP_CONF)
