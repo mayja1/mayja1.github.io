@@ -81,13 +81,15 @@ function statusChangeCallback(response) {
           var image = document.createElement('img');
 
           image.src = photo;
-          if(photo.height > photo.width) {
+          image.style.height = '100%';
+          image.style.width = '100%';
+          /*if(photo.height > photo.width) {
            image.style.height = '100%';
            image.style.width = 'auto';
          } else {
           image.style.height = 'auto';
           image.style.width = '100%';
-        }
+        }*/
         var label = document.createElement('label');
 
         label.style.width = '100%';
@@ -126,8 +128,8 @@ function getUserRatings(email) {
         var totalNumberOfRatings = 0;
         var totalRating = 0;
         var max = 0;
-        for(var i = 0; i <= 9; i= i+1){
-          var numRatings = dict["" + (i+1)];
+        for(var i = 1; i <= 10; i= i+1){
+          var numRatings = dict["" + (i)];
           list.push(numRatings);
           totalNumberOfRatings += numRatings;
           totalRating = numRatings * (i+1);
@@ -140,14 +142,22 @@ function getUserRatings(email) {
           var numRatings = list[i];
           console.log("" + (i+1) + ": " + numRatings);
           var bar = document.createElement('li');
-          bar.style.width = "" + ((numRatings/max)*100) + "%";
+          if(max == 0) {
+            bar.style.width = "" + 0 + "%";
+          } else {
+            bar.style.width = "" + ((numRatings/max)*100) + "%";
+          }
           bar.style.background = colors[i];
           bar.innerHTML = "" + (i+1);
           var container = document.getElementById("bargraph");
           container.appendChild(bar);
       }
       var text = document.getElementById("hotness");
-      text.innerHTML = text.innerHTML + (totalRating/totalNumberOfRatings);
+      if(totalNumberOfRatings == 0) {
+        text.innerHTML = text.innerHTML + "You currently have no ratings"
+      } else {
+        text.innerHTML = text.innerHTML + (totalRating/totalNumberOfRatings);
+      }
       
     }
   })

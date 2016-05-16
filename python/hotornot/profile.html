@@ -38,35 +38,35 @@
       </div> <!-- /container -->
 
       <script type="text/javascript">
-      //$("#btn_").on('click', function () {
-        function setPics(){
-          var checkbox_value = "";
-          var count = 0;
-          $(":checkbox").each(function () {
-            var ischecked = $(this).is(":checked");
-            if (ischecked) {
-              count = count + 1;
-              checkbox_value += $(this).val() + "|";
+      function setPics(){
+        var checkbox_value = "";
+        var count = 0;
+        $(":checkbox").each(function () {
+          var ischecked = $(this).is(":checked");
+          if (ischecked) {
+            count = count + 1;
+            checkbox_value += $(this).val() + "|";
+          }
+        });
+        if(count == 0) {
+          alert("You must select at least one picture for your profile");
+        } else {
+          FB.api('/me?fields=email', function(emailResponse) {
+          $.ajax({
+            type:"post",
+            url:"sendPictures",
+            data:{
+              email: emailResponse.email,
+              pics : checkbox_value
+            },
+            success:function(msg){
+              alert(msg);
             }
-          });
-    // your awesome code calling ajax
-    if(count == 0) {
-      alert("You must select at least one picture for your profile");
-    } else {
-      $.ajax({
-        type:"post",
-        url:"sendPictures",
-        data:{
-          email: "test@test.com",
-          pics : checkbox_value
-        },
-        success:function(msg){
-          alert(msg);
-        }
-      })
-    };
-  } 
-  </script>
+          })
+        })
+        };
+      } 
+      </script>
 
       <!-- Bootstrap core JavaScript
       ================================================== -->

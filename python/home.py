@@ -2,17 +2,16 @@ import os, os.path
 import random
 import string
 import cherrypy
-import pymysql
+#import pymysql
 import subprocess
 import sys
 import json
 from jinja2 import Environment, FileSystemLoader
+import sqlite3
 
 # declare global variables
 env = Environment(loader=FileSystemLoader('./hotornot'))
-conn = pymysql.connect(host='titan.csse.rose-hulman.edu', port=3306, user='hullzr', passwd='Ballin22', db='Hulleva Amayzing ProjectDB')
-
-
+#conn = pymysql.connect(host='titan.csse.rose-hulman.edu', port=3306, user='hullzr', passwd='Ballin22', db='Hulleva Amayzing ProjectDB')
 class ServeSite(object):
         @cherrypy.expose
         def index(self):
@@ -39,62 +38,53 @@ class ServeSite(object):
 
         @cherrypy.expose
         def sendPictures(self, email, pics):
-            for s in pics.split("|") :
-                print("pics: " + s)
+            pictures = ["", "", "", ""]
+            i = 0
+            for s in pics.split("|"):
+                pictures[i] = s
+                i = i + 1
             print("email: " + email);
-            ''' TODO Send pics and email to database'''
+            response = "response"
             try:
-                with conn.cursor() as cursor:
-                    sql = "INSERT INTO 'Users' ('Email', 'Picture1', 'Picture2', 'Picture3') VALUES (%s, %s, %s, %s)"
-                    cursor.execute(sql, (email, pics[0], pics[1], pics[2]))
+                conn = sqlite3.connect('hotornot.db')
+                cursor = conn.cursor()
+                sql = "REPLACE INTO 'User' ('Email', 'Picture1', 'Picture2', 'Picture3') VALUES (?, ?, ?, ?)"
+                response = cursor.execute(sql, (email, pictures[0], pictures[1], pictures[2]))
+                print("sql statement executed")
                 conn.commit()
             finally:
-                return "response"
+                return response
 
         @cherrypy.expose
         def getProfile(self, email):
-            try:
-                with conn.cursor as cursor:
-                    sql = "SELECT 'Picture1', 'Picture2', 'Picture3' FROM 'Users' WHERE 'Email' = %s"
-                    cursor.execute(sql, (email))
-                    result = cursor.fetchone()
-                    print(result)
-                    return json.dumps(result)
-            finally:
-                return ""
+            result = {}
+        
+
+            conn = sqlite3.connect('hotornot.db')
+            cursor = conn.cursor()
+            sql = "SELECT Picture1, Picture2, Picture3 FROM User WHERE Email = ?"
+            temp = cursor.execute(sql, (email,))
+            for row in temp:
+                result['Picture1'] = row[0]
+                result['Picture2'] = row[1]
+                result['Picture3'] = row[2]            
+
+            return json.dumps(result)
 
         @cherrypy.expose
         def getRatings(self, email):
-            print("")
-            print("email: " + email)
-            print("")
-            data = {
-            "10": 10,
-            "9": 9,
-            "8": 8,
-            "7": 10,
-            "6": 9,
-            "5": 8,
-            "4": 10,
-            "3": 9,
-            "2": 8,
-            "1": 1
-            }
-            return json.dumps(data);
-
-            try:
-                with conn.cursor as cursor:
-                    sql = "SELECT 'Ranking1', 'Ranking2', 'Ranking3', 'Ranking4', 'Ranking5', 'Ranking6', 'Ranking7', 'Ranking8', 'Ranking9','Ranking10' FROM 'Users' WHERE 'email' = %s"
-                    cursor.execute(sql, (email))
-                    result = cursor.fetchone()
-                    ###########################################
-                    # NOTE: WE WILL HAVE TO CONNECTION.CLOSE()#
-                    #           AT SOME POINT                 #
-                    ###########################################
-                    print(result)
-                    return json.dumps(result)
-            finally:
-                return ""
+            result = {};
+                
+            conn = sqlite3.connect('hotornot.db')
+            cursor = conn.cursor()
+            sql = "SELECT rank1, rank2, rank3, rank4, rank5, rank6, rank7, rank8, rank9,rank10 FROM User WHERE email = ?"
+            temp = cursor.execute(sql, (email,))
+            for row in temp:
+                for i in range(1,11):
+                    rank = str(i)
+                    result[rank] = row[i-1]
+                    print(rank + ": " + str(row[i-1]))
+            return json.dumps(result)
 CP_CONF = {
         '/resources': {
             'tools.staticdir.on': True,
