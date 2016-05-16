@@ -44,10 +44,15 @@ class ServeSite(object):
 
         @cherrypy.expose
         def setRating(self, email, rank):
-            conn = sqlite3.connect('hotornot.db')
-            cursor = conn.cursor()
-            sql = "UPDATE User SET ? = ? + 1 WHERE Email = ?"
-            response = cursor.execute(sql, ('Rank'+str(rank), 'Rank'+str(rank), email))
+            try:
+                conn = sqlite3.connect('hotornot.db')
+                cursor = conn.cursor()
+                sql = "UPDATE User SET ? = ? + 1 WHERE Email = ?"
+                response = cursor.execute(sql, ('Rank'+str(rank), 'Rank'+str(rank), email))
+                conn.commit()
+            finally:
+                print("Ranking updated")
+
 
         @cherrypy.expose
         def sendPictures(self, email, pics):
@@ -77,48 +82,51 @@ class ServeSite(object):
         @cherrypy.expose
         def getRandomUser(self):
             result = {}
-
-            conn = sqlite3.connect('hotornot.db')
-            cursor = conn.cursor()
-            sql = "SELECT Email, Picture1, Picture2, Picture3 FROM User WHERE Email != ?  ORDER BY RANDOM() LIMIT 1"
-            temp = cursor.execute(sql, (cherrypy.session['email'],))
-            for row in temp:
-                result['Email'] = row[0]
-                result['Picture1'] = row[1]
-                result['Picture2'] = row[2]
-                result['Picture3'] = row[3]
-            return json.dumps(result)
+            try:
+                conn = sqlite3.connect('hotornot.db')
+                cursor = conn.cursor()
+                sql = "SELECT Email, Picture1, Picture2, Picture3 FROM User WHERE Email != ?  ORDER BY RANDOM() LIMIT 1"
+                temp = cursor.execute(sql, (cherrypy.session['email'],))
+                for row in temp:
+                    result['Email'] = row[0]
+                    result['Picture1'] = row[1]
+                    result['Picture2'] = row[2]
+                    result['Picture3'] = row[3]
+            finally:
+                return json.dumps(result)
 
         @cherrypy.expose
         def getProfile(self, email):
             result = {}
         
-
-            conn = sqlite3.connect('hotornot.db')
-            cursor = conn.cursor()
-            sql = "SELECT Picture1, Picture2, Picture3 FROM User WHERE Email = ?"
-            temp = cursor.execute(sql, (email,))
-            for row in temp:
-                result['Picture1'] = row[0]
-                result['Picture2'] = row[1]
-                result['Picture3'] = row[2]            
-
-            return json.dumps(result)
+            try: 
+                conn = sqlite3.connect('hotornot.db')
+                cursor = conn.cursor()
+                sql = "SELECT Picture1, Picture2, Picture3 FROM User WHERE Email = ?"
+                temp = cursor.execute(sql, (email,))
+                for row in temp:
+                    result['Picture1'] = row[0]
+                    result['Picture2'] = row[1]
+                    result['Picture3'] = row[2]            
+            finally:
+                return json.dumps(result)
 
         @cherrypy.expose
         def getRatings(self, email):
             result = {};
-                
-            conn = sqlite3.connect('hotornot.db')
-            cursor = conn.cursor()
-            sql = "SELECT rank1, rank2, rank3, rank4, rank5, rank6, rank7, rank8, rank9,rank10 FROM User WHERE email = ?"
-            temp = cursor.execute(sql, (email,))
-            for row in temp:
-                for i in range(1,11):
-                    rank = str(i)
-                    result[rank] = row[i-1]
-                    print(rank + ": " + str(row[i-1]))
-            return json.dumps(result)
+              
+            try:  
+                conn = sqlite3.connect('hotornot.db')
+                cursor = conn.cursor()
+                sql = "SELECT rank1, rank2, rank3, rank4, rank5, rank6, rank7, rank8, rank9,rank10 FROM User WHERE email = ?"
+                temp = cursor.execute(sql, (email,))
+                for row in temp:
+                    for i in range(1,11):
+                        rank = str(i)
+                        result[rank] = row[i-1]
+                        print(rank + ": " + str(row[i-1]))
+            finally:
+                return json.dumps(result)
 CP_CONF = {
         '/resources': {
             'tools.staticdir.on': True,
