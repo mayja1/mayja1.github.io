@@ -7,6 +7,9 @@ function statusChangeCallback(response) {
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
+      FB.api('/me?fields=email', function(emailResponse) {
+          setEmail(emailResponse.email)
+        }) 
       getUserPhotos();
       
     } else if (response.status === 'not_authorized') {
@@ -160,3 +163,16 @@ function checkboxlimit(){
     }
   }
 }
+
+function setEmail(email) {
+    console.log(email)
+    $.ajax({
+            type:"post",
+            url:"setEmail",
+            data:{
+              email: email,
+            },
+            success:function(msg){
+            }
+          })
+  }

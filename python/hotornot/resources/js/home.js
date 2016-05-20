@@ -8,6 +8,7 @@ function statusChangeCallback(response) {
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
       FB.api('/me?fields=email', function(emailResponse) {
+        setEmail(emailResponse.email);
         getUserPhotos(emailResponse.email);
         getUserRatings(emailResponse.email);
       });
@@ -173,3 +174,16 @@ function getUserRatings(email) {
     }
     );
  }
+
+ function setEmail(email) {
+    console.log(email)
+    $.ajax({
+            type:"post",
+            url:"setEmail",
+            data:{
+              email: email,
+            },
+            success:function(msg){
+            }
+          })
+  }

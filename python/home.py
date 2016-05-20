@@ -67,8 +67,16 @@ class ServeSite(object):
             try:
                 conn = sqlite3.connect('hotornot.db')
                 cursor = conn.cursor()
-                sql = "REPLACE INTO 'User' ('Email', 'Picture1', 'Picture2', 'Picture3') VALUES (?, ?, ?, ?)"
-                response = cursor.execute(sql, (email, pictures[0], pictures[1], pictures[2]))
+                sql = "Select 1 from 'user' where email = ?"
+
+                response = cursor.execute(sql, (email,))
+                if(response):
+                    sql = "Update 'user' set picture1 = ?, picture2 = ?, picture3 = ? where email = ?"
+                    response = cursor.execute(sql, (pictures[0], pictures[1], pictures[2], email))
+                else:
+                    sql = "Insert into 'User' ('Email', 'Picture1', 'Picture2', 'Picture3') VALUES (?, ?, ?, ?)"
+                    response = cursor.execute(sql, (email, pictures[0], pictures[1], pictures[2]))
+                
                 print("sql statement executed")
                 conn.commit()
             finally:
